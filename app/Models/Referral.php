@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Привязка приведённого мастера к тому, кто его привёл.
@@ -48,5 +49,13 @@ class Referral extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', self::STATUS_REWARDED);
+    }
+
+    /**
+     * Связь с начислением по этой привязке (одно к одному)
+     */
+    public function earning(): HasOne
+    {
+        return $this->hasOne(ReferralEarning::class, 'referral_id');
     }
 }
